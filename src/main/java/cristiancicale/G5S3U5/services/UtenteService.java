@@ -27,18 +27,16 @@ public class UtenteService {
         this.bcrypt = bcrypt;
     }
 
-    public Utente save(Utente utente) {
+    public Utente save(UtenteDTO body) {
+        if (this.utenteRepository.existsByUsername(body.username()))
+            throw new BadRequestException("L'username " + body.username() + "è già in uso");
 
-        if (this.utenteRepository.existsByUsername(utente.getUsername()))
-            throw new BadRequestException("Username già in uso");
+        Utente newUtente = new Utente(body.username(), this.bcrypt.encode(body.password()));
+        Utente savedUtente = this.utenteRepository.save(newUtente);
 
-        utente.setPassword(this.bcrypt.encode(utente.getPassword()));
+        log.info("Il dipendente con id " + savedUtente.getId() + "è stato salvato correttamente");
 
-        Utente saved = this.utenteRepository.save(utente);
-
-        log.info("Utente con id " + saved.getId() + " registrato");
-
-        return saved;
+        return savedUtente;
     }
 
     public Page<Utente> findAll(int page, int size, String sortBy) {

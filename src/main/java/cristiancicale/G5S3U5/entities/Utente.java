@@ -38,10 +38,10 @@ public class Utente implements UserDetails {
     @Column(nullable = false)
     private Ruolo ruolo;
 
-    public Utente(String username, String password, Ruolo ruolo) {
+    public Utente(String username, String password) {
         this.username = username;
         this.password = password;
-        this.ruolo = ruolo;
+        this.ruolo = Ruolo.UTENTE;
     }
 
     @Override
