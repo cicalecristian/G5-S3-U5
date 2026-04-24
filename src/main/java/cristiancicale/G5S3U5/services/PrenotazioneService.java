@@ -73,7 +73,7 @@ public class PrenotazioneService {
         return this.prenotazioneRepository.findById(prenotazioneId).orElseThrow(() -> new NotFoundException(prenotazioneId));
     }
 
-    public void delete(UUID id, Utente utente) {
+    public void findByIdAndDelete(UUID id, Utente utente) {
 
         Prenotazione found = findById(id);
 

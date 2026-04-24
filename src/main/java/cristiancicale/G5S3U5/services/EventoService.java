@@ -4,6 +4,7 @@ import cristiancicale.G5S3U5.entities.Evento;
 import cristiancicale.G5S3U5.entities.Ruolo;
 import cristiancicale.G5S3U5.entities.Utente;
 import cristiancicale.G5S3U5.exceptions.NotFoundException;
+import cristiancicale.G5S3U5.exceptions.UnauthorizedException;
 import cristiancicale.G5S3U5.payloads.EventoDTO;
 import cristiancicale.G5S3U5.repositories.EventoRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -25,11 +26,19 @@ public class EventoService {
         this.eventoRepository = eventoRepository;
     }
 
-    public Evento save(Evento evento, Utente organizzatore) {
+    public Evento save(EventoDTO body, Utente organizzatore) {
 
         if (organizzatore.getRuolo() != Ruolo.ORGANIZZATORE) {
-            throw new RuntimeException("Solo gli organizzatori possono creare eventi");
+            throw new UnauthorizedException("Solo gli organizzatori possono creare eventi");
         }
+
+        Evento evento = new Evento();
+
+        evento.setTitolo(body.titolo());
+        evento.setDescrizione(body.descrizione());
+        evento.setData(body.data());
+        evento.setLocation(body.location());
+        evento.setPosti_disponibili(body.postiDisponibili());
 
         evento.setOrganizzatore(organizzatore);
 
@@ -51,7 +60,7 @@ public class EventoService {
         return this.eventoRepository.findById(eventoId).orElseThrow(() -> new NotFoundException(eventoId));
     }
 
-    public Evento update(UUID id, EventoDTO body, Utente organizzatore) {
+    public Evento findByIdAndUpdate(UUID id, EventoDTO body, Utente organizzatore) {
 
         Evento found = findById(id);
 
@@ -72,7 +81,7 @@ public class EventoService {
         return updated;
     }
 
-    public void delete(UUID id, Utente organizzatore) {
+    public void findByIdAndDelete(UUID id, Utente organizzatore) {
 
         Evento found = findById(id);
 
