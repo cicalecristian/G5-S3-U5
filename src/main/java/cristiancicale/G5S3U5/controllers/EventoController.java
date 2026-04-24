@@ -28,7 +28,7 @@ public class EventoController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EventoRespDTO saveViaggio(@RequestBody @Validated EventoDTO body, BindingResult validationResult, @RequestAttribute Utente user) {
+    public EventoRespDTO saveEvento(@RequestBody @Validated EventoDTO body, BindingResult validationResult, @RequestAttribute Utente user) {
 
         if (validationResult.hasErrors()) {
             List<String> errors = validationResult.getFieldErrors()
